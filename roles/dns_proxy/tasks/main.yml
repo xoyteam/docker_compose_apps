@@ -1,0 +1,36 @@
+- name: Create dns_proxy directory {{ dns_proxy_install_path }}
+  file:
+    path: "{{ dns_proxy_install_path }}"
+    state: directory
+
+- name: Install dns_proxy docker-compose in {{ dns_proxy_install_path }}
+  template:
+    src: "docker-compose.yml"
+    dest: "{{ dns_proxy_install_path }}/"
+    mode: '0644'
+    backup: yes
+  register: dns_proxy_docker_compose
+
+- name: Create dns_proxy configuration directory in {{ dns_proxy_install_path }}
+  file:
+    path: "{{ dns_proxy_install_path }}/cfg"
+    state: directory
+
+- name: docker dns proxy config
+  template:
+    src: dns.mageddo.json.j2
+    dest: "{{ dns_proxy_install_path }}/cfg/config.json"
+    mode: 0644
+
+- name: Create dns_proxy data directory in {{ dns_proxy_install_path }}
+  file:
+    path: "{{ dns_proxy_install_path }}/data"
+    state: directory
+    owner: nobody
+    group: nogroup
+
+- name: Restart app
+  #when: dns_proxy_docker_compose.changed | bool
+  docker_compose:
+    project_src: "{{ dns_proxy_install_path }}"
+    restarted: yes

@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  dnsproxy:
+    image: defreitas/dns-proxy-server:{{ dns_proxy_image_tag }}
+    restart: always
+    ports:
+      - "{{ dns_proxy_listen_host }}:{{ dns_proxy_listen_port }}:5380"
+    volumes:
+      - "./cfg:/app/conf"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/etc/resolv.conf:/etc/resolv.conf"
+    healthcheck:
+      test: wget localhost:5380/ -q -O - > /dev/null 2>&1

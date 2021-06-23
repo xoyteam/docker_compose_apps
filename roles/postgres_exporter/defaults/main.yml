@@ -1,0 +1,11 @@
+postgres_exporter_image_tag: "0.9.0"
+docker_compose_home: "/home/docker"
+postgres_exporter_install_path: "{{ docker_compose_home }}/postgres-exporter"
+
+postgres_login_user: postgres
+postgres_login_pass: ""
+postgres_login_host: localhost
+postgres_login_port: 5432
+postgres_login_db: postgres
+postgres_login_ssl: disabled
+

@@ -1,0 +1,35 @@
+- name: Create postgres_exporter directory {{ postgres_exporter_install_path }}
+  become: yes
+  file:
+    path: "{{ postgres_exporter_install_path }}"
+    state: directory
+
+- name: Install postgres_exporter docker-compose in {{ postgres_exporter_install_path }}
+  become: yes
+  template:
+    src: "docker-compose.yml"
+    dest: "{{ postgres_exporter_install_path }}/"
+    mode: '0644'
+    backup: yes
+  register: postgres_exporter_docker_compose
+
+- name: Create postgres_exporter configuration directory in {{ postgres_exporter_install_path }}
+  become: yes
+  file:
+    path: "{{ postgres_exporter_install_path }}/cfg"
+    state: directory
+
+- name: Create postgres_exporter data directory in {{ postgres_exporter_install_path }}
+  become: yes
+  file:
+    path: "{{ postgres_exporter_install_path }}/data"
+    state: directory
+    owner: nobody
+    group: nogroup
+
+- name: Restart container
+  #  when: postgres_exporter_docker_compose.changed | bool
+  become: yes
+  docker_compose:
+    project_src: "{{ postgres_exporter_install_path }}"
+    restarted: yes

@@ -1,0 +1,6 @@
+dns_proxy_image_tag: "latest"
+docker_compose_home: "/home/docker"
+dns_proxy_install_path: "{{ docker_compose_home }}/dns-proxy"
+
+dns_proxy_listen_host: "127.0.0.1"
+dns_proxy_listen_port: 5380

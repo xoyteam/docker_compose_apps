@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  postgres_exporter:
+    image: bitnami/postgres-exporter:{{ postgres_exporter_image_tag }}
+    restart: always
+    environment:
+      DATA_SOURCE_NAME: "postgresql://{{ postgres_login_user }}:{{ postgres_login_pass }}@{{ postgres_login_host }}:{{ postgres_login_port }}/{{ postgres_login_db }}?sslmode={{ postgres_login_ssl }}"
+    labels:
+      - app=postgres-exporter
+      - traefik.enable=false
+    healthcheck:
+      test: wget localhost:9187/metrics -q -O - > /dev/null 2>&1
